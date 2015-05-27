@@ -23,3 +23,28 @@ OpenGL ES 2.0与1.x渲染管线还是存在许多的相似性，只是OpenGL ES 
 
     * Varying0~n指的是从顶点着色器传递到片元着色器的易变数据变量，如前面所介绍，由系统在顶点着色器后的光栅化阶段自动插值产生。其个数是不一定的，取决于具体的需求。
     * fl\_FragColor指的是计算后此片元的颜色。一般在片元着色器中的最后都需要对gl\_FragColor进行赋值。例如，前面提到的三角形案例的片元着色器就有“gl_FragColor=aaColor”语句。
+
+frag.sh
+```
+precision mediump float;
+varying  vec4 vColor; //接收从顶点着色器过来的参数
+
+void main()                         
+{                       
+   gl_FragColor = vColor;//给此片元颜色值
+}
+```
+
+vertex.sh
+```
+uniform mat4 uMVPMatrix; //总变换矩阵
+attribute vec3 aPosition;  //顶点位置
+attribute vec4 aColor;    //顶点颜色
+varying  vec4 vColor;  //用于传递给片元着色器的变量
+
+void main()     
+{                                   
+   gl_Position = uMVPMatrix * vec4(aPosition,1); //根据总变换矩阵计算此次绘制此顶点位置
+   vColor = aColor;//将接收的颜色传递给片元着色器 
+}                      
+```
